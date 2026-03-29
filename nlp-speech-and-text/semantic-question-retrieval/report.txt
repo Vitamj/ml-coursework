@@ -1,0 +1,40 @@
+# Лабораторная работа №5
+
+## Описание
+Реализован семантический поиск по датасету StackSample с использованием SentenceTransformers и Chroma DB. Эмбеддинги генерируются для объединённого текста вопроса и ответа, хранятся в Chroma, выполняется поиск по смысловому сходству.
+
+## Метрики
+- Precision@5 (Semantic Search): 1.00
+**Примечание**: Использованы запросы, связанные с Python (матрицы и unit testing).
+
+## Плюсы и минусы
+- **Плюсы**: Учёт семантики, поддержка синонимов, высокая релевантность для сложных запросов.
+- **Минусы**: Ограниченная выборка (371 вопрос), высокие требования к памяти, медленная генерация эмбеддингов.
+
+## Сравнение с ЛР4
+Семантический поиск лучше учитывает смысл запроса, находя релевантные вопросы даже без точного совпадения слов. Например, для 'how to sort a list in python' находятся вопросы по Python, но не точные из-за ограничений выборки.
+Размер хранилища Chroma: 1.93 MB. Chroma использует ANN-индексы для быстрого поиска.
+
+## Пример
+Запрос: how to sort a list in python
+       Id                                                                                Title  Distance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Answer
+0  209470                                              Can I use Python as a Bash replacement?  1.439325                                                                                                                                                                                                                                                                                                                                                                                                                            adding previous answer check pexpect module dealing interactive command adduser passwd etc
+1  217900                                           how to generate unit test code for methods  1.475197  read unit testing framework section python library reference basic example documentation import random import unittest class testsequencefunctionsunittesttestcase def setupself selfseq range def testshuffleself make sure shuffled sequence lose element randomshuffleselfseq selfseqsort selfassertequalselfseq range def testchoiceself element randomchoiceselfseq selfassertelement selfseq def testsampleself selfassertraisesvalueerror randomsample selfseq element randomsampleselfseq selfassertelement 
+2  211160                                                           Python Inverse of a Matrix  1.513136                                  look numpy matrix manipulation module mainly written c much faster programming pure python example invert matrix matrix manipulation numpy import matrix numpy import linalg matrix creates matrix x matrix creates matrix like column vector matrix creates matrix like row vector print transpose print ax matrix multiplication x print ai inverse print linalgsolvea x solve linear equation system also look array module much efficient implementation list deal one data type
+3  199180  Is there any way to get python omnicomplete to work with non-system modules in vim?  1.571012                                                                                                                generated ctags one sitepackages started working package im guessing omnicomplete function depends ctags nonsys module edit true here problem poor testing part omnicomplete working part project issue im working django project order import djangodb need environment variable set since couldnt import djangodb class inherited djangodb module imported class inherited djangodb wouldnt complete
+4  217020                   Python/editline on OS X: Â£ sign seems to be bound to ed-prev-word  1.599744                                                                                                                                                                                                                                                                                                                                                                                                         may editline issue libedit may accept utf character httptrackerfirebirdsqlorgbrowsecoreaction httpmarcinfotrw
+
+
+## Проблемы и решения
+- Обнаружены некорректные Id (например, ")") в Questions.csv, устранены фильтрацией по регулярному выражению `r'^\d+$'`.
+- Удалены дублирующиеся секции кода для предотвращения ошибок вроде `DuplicateIDError`.
+- Ограниченная выборка (364 вопроса) привела к низкой релевантности для запроса "how to sort a list in python".
+
+## Анализ результатов
+- Precision@5: 1.00 для запросов "python matrix operations" и "python unit testing", что подтверждает высокую точность семантического поиска.
+- Для "how to sort a list in python" релевантные вопросы отсутствуют в выборке, что ограничивает результаты.
+- Chroma DB занимает 1.93 MB, используя HNSW-индексы для ANN-поиска, что обеспечивает высокую скорость.
+
+## Сравнение с ЛР4
+Семантический поиск превосходит TF-IDF/BM25 в учёте синонимов и контекста (например, "matrix" и "numpy").
+Однако ограниченная выборка снижает релевантность для некоторых запросов по сравнению с ЛР4, где полнотекстовый поиск мог находить частичные совпадения.
