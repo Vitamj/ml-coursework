@@ -31,7 +31,7 @@ stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 # Настройка Google Gemini API
-GOOGLE_API_KEY = "AIzaSyDiooimfiuczAV5MC2UEQ7rvZfYfBX05IE"
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Функция очистки текста
